@@ -2,29 +2,30 @@
 
 namespace App\Services;
 
-use eXorus\PhpMimeMailParser\Parser;
+use ZBateson\MailMimeParser\MailMimeParser;
+use ZBateson\MailMimeParser\Header\HeaderConsts;
 
 class EmailParserService
 {
-    protected Parser $parser;
+    protected MailMimeParser $parser;
 
     public function __construct()
     {
-        $this->parser = new Parser();
+        $this->parser = new MailMimeParser();
     }
 
     public function parse(string $raw): array
     {
-        $this->parser->setText($raw);
+        $message = $this->parser->parse($raw, false);
 
-        $text = $this->parser->getMessageBody('text') ?? '';
+        $text = $message->getTextContent() ?? '';
         $text = preg_replace('/[^\P{C}\n]/u', '', $text);
 
         return [
             'raw_text' => trim($text),
-            'from' => $this->parser->getHeader('from') ?? 'unknown@example.com',
-            'to' => $this->parser->getHeader('to') ?? '',
-            'subject' => $this->parser->getHeader('subject') ?? '',
+            'from' => $message->getHeaderValue(HeaderConsts::FROM) ?? 'unknown@example.com',
+            'to' => $message->getHeaderValue(HeaderConsts::TO) ?? '',
+            'subject' => $message->getSubject() ?? '',
         ];
     }
 }
