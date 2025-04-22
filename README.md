@@ -16,6 +16,41 @@
 - Project path: `/var/www/html/email-parser`
 - DB used: `emails` (loaded via `successful_emails.sql`)
 
+## How to install locally
+
+- I've prepared a Docker setup for local development. You can run the following command to start the containers:
+  ```bash
+  docker-compose up -d
+  ```
+- Run the following command to install the dependencies:
+  ```bash
+  docker-compose exec app composer install
+  ```
+- Copy the `.env.example` file to `.env` and set your database credentials:
+  ```bash
+    cp .env.example .env
+    ```
+- Generate the application key:
+  ```bash
+  docker-compose exec app php artisan key:generate
+  ```
+- Run the migrations:
+  ```bash
+    docker-compose exec app php artisan migrate
+    ```
+  - Create a user using `php artisan tinker` for API authentication:
+  ```bash
+    docker-compose exec app php artisan tinker
+    ```
+    ```php
+    $user = \App\Models\User::create([
+    'name' => 'Your Name',
+    'email' => 'your_email@example.com',
+    'password' => bcrypt('your_password'),
+    ]);
+  echo $user->createToken('API Token')->plainTextToken;
+    ```
+
 ## 🧪 How to Test
 
 - Run parser manually: `php artisan emails:parse`
