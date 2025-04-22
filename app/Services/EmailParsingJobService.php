@@ -49,7 +49,7 @@ class EmailParsingJobService
     {
         try {
             DB::transaction(function () use ($email, $console) {
-                $parsedText = $this->parser->parse($email->email);
+                $parsedText = $this->parser->parse_raw_text($email->email);
                 $email->raw_text = empty($parsedText) ? self::DEFAULT_RAW_TEXT : $parsedText;
                 $email->save();
 
