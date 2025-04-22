@@ -10,7 +10,9 @@
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
-        "zbateson/mail-mime-parser": "^3.0"
+        "php-mime-mail-parser/php-mime-mail-parser": "^9.0",
+        "ext-dom": "*",
+        "ext-libxml": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

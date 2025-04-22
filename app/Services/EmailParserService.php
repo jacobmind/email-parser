@@ -2,30 +2,67 @@
 
 namespace App\Services;
 
-use ZBateson\MailMimeParser\MailMimeParser;
-use ZBateson\MailMimeParser\Header\HeaderConsts;
-
 class EmailParserService
 {
-    protected MailMimeParser $parser;
-
-    public function __construct()
+    public function parse(?string $raw): ?string
     {
-        $this->parser = new MailMimeParser();
+        if (empty($raw)) {
+            return null;
+        }
+
+        try {
+            $parser = new \PhpMimeMailParser\Parser();
+            $parser->setText($raw);
+
+            $html = $parser->getMessageBody('html');
+
+            if (!empty($html)) {
+                return $this->extractVisibleTextFromHtml($html);
+            }
+
+            $plain = $parser->getMessageBody('text');
+            if (!empty($plain)) {
+                return $this->cleanContent($plain);
+            }
+
+            return null;
+        } catch (\Throwable $e) {
+            logger()->error('Email parsing failed: ' . $e->getMessage());
+            return null;
+        }
     }
 
-    public function parse(string $raw): array
+    protected function extractVisibleTextFromHtml(string $html): string
     {
-        $message = $this->parser->parse($raw, false);
+        libxml_use_internal_errors(true);
+        $dom = new \DOMDocument();
+        $dom->loadHTML($html, LIBXML_NOERROR | LIBXML_NOWARNING);
 
-        $text = $message->getTextContent() ?? '';
-        $text = preg_replace('/[^\P{C}\n]/u', '', $text);
+        // Remove script and style elements
+        $xpath = new \DOMXPath($dom);
+        foreach ($xpath->query('//script | //style') as $node) {
+            $node->parentNode->removeChild($node);
+        }
 
-        return [
-            'raw_text' => trim($text),
-            'from' => $message->getHeaderValue(HeaderConsts::FROM) ?? 'unknown@example.com',
-            'to' => $message->getHeaderValue(HeaderConsts::TO) ?? '',
-            'subject' => $message->getSubject() ?? '',
-        ];
+        // Extract body content only
+        $body = $dom->getElementsByTagName('body')->item(0);
+        $text = $body ? $body->textContent : $dom->textContent;
+        $text = $this->cleanWeirdWhitespace($text);
+
+        return $this->cleanContent($text);
+    }
+
+    protected function cleanContent(string $content): string
+    {
+        $content = html_entity_decode($content);
+        return trim(preg_replace('/\s+/', ' ', $content));
+    }
+
+    protected function cleanWeirdWhitespace(string $text): string
+    {
+        // Remove non-breaking spaces and zero-width characters
+        $text = preg_replace('/[\x{00A0}\x{200B}-\x{200D}\x{FEFF}]+/u', ' ', $text);
+        // Collapse multiple spaces into one
+        return preg_replace('/\s+/', ' ', $text);
     }
 }
