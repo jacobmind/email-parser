@@ -39,7 +39,7 @@
                             <li><code>GET /emails/{id}</code> – Retrieve a specific email</li>
                             <li><code>PUT /emails/{id}</code> – Update email content</li>
                             <li><code>GET /emails</code> – List all emails (excluding soft-deleted)</li>
-                            <li><code>DELETE /emails/{id}</code> – Soft delete email</li>
+                            <li><code>DELETE /emails/{id}</code> – Delete email</li>
                         </ul>
                     </ul>
 

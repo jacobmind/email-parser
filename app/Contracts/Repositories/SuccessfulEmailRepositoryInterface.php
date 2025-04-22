@@ -42,7 +42,7 @@ interface SuccessfulEmailRepositoryInterface
     public function update(int $id, array $data): SuccessfulEmail;
 
     /**
-     * Soft delete a successful email by ID.
+     * Delete a successful email by ID.
      *
      * @param int $id
      * @return void
