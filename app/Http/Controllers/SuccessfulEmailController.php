@@ -18,7 +18,8 @@ class SuccessfulEmailController extends Controller
 
     public function index()
     {
-        return SuccessfulEmail::whereNull('deleted_at')->get();
+        return SuccessfulEmail::limit(10)
+            ->get();
     }
 
     public function store(Request $request): JsonResponse

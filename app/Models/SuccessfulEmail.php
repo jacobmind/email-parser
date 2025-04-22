@@ -13,5 +13,4 @@ class SuccessfulEmail extends Model
         'sender_ip', 'to', 'timestamp',
     ];
 
-    use SoftDeletes;
 }

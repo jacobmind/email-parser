@@ -26,8 +26,8 @@
                     <h1 class="mb-1 font-medium text-xl">Email Parser API</h1>
                     <p class="mb-2 text-[#706f6c] dark:text-[#A1A09A]">Built with Laravel 12 and PHP 8.4.</p>
 
-                    <p class="mb-4">This application automatically processes raw email content and provides a secure RESTful API. Features include:</p>
-
+                    <p class="mb-4">This application automatically processes raw email content and provides a secure RESTful API.</p>
+                    <p class="mb-4 font-bold">Features include:</p>
                     <ul class="list-disc pl-5 mb-4 space-y-2">
                         <li>Parses raw emails received from Sendgrid</li>
                         <li>Extracts only the plain text content, stripping HTML and headers</li>
