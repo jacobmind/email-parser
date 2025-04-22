@@ -13,4 +13,11 @@ class SuccessfulEmail extends Model
         'sender_ip', 'to', 'timestamp',
     ];
 
+    public $timestamps = false; // todo: could be removed after fixing db import
+
+    public function scopeUnprocessed($query)
+    {
+        return $query->whereNull('raw_text')->orWhere('raw_text', '');
+    }
+
 }
