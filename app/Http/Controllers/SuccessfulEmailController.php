@@ -95,7 +95,7 @@ class SuccessfulEmailController extends Controller
     }
 
     /**
-     * Soft delete a specific successful email by ID.
+     * Delete a specific successful email by ID.
      *
      * @param int $id
      * @return JsonResponse
@@ -103,6 +103,6 @@ class SuccessfulEmailController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $this->repository->delete($id);
-        return response()->json(['message' => 'Soft deleted']);
+        return response()->json(['message' => 'The email has been successfully deleted.']);
     }
 }

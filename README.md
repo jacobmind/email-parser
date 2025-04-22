@@ -86,8 +86,8 @@
 - [x] Create POST `/api/emails` to store and auto-parse
 - [x] Create GET `/api/emails/{id}` to fetch by ID
 - [x] Create PUT `/api/emails/{id}` to update
-- [x] Create GET `/api/emails` to list (exclude soft-deleted)
-- [x] Create DELETE `/api/emails/{id}` for soft delete
+- [x] Create GET `/api/emails` to list
+- [x] Create DELETE `/api/emails/{id}`
 - [x] Add token-based authentication middleware
 
 ### Finalization
