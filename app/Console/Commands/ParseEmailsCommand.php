@@ -2,9 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Services\EmailParsingJobService;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
-use App\Services\EmailParserService;
 
 class ParseEmailsCommand extends Command
 {
@@ -22,12 +21,12 @@ class ParseEmailsCommand extends Command
      */
     protected $description = 'Parse raw emails and extract plain text content.';
 
-    protected EmailParserService $parser;
+    protected EmailParsingJobService $jobService;
 
-    public function __construct(EmailParserService $parser)
+    public function __construct(EmailParsingJobService $jobService)
     {
         parent::__construct();
-        $this->parser = $parser;
+        $this->jobService = $jobService;
     }
 
     /**
@@ -36,34 +35,8 @@ class ParseEmailsCommand extends Command
     public function handle(): int
     {
         $this->info('Starting email parsing...');
-
-        $emails = DB::table('successful_emails')
-            ->whereNull('raw_text')
-            ->orWhere('raw_text', '')
-            ->limit(1) // todo: adjust it accordingly
-            ->get();
-
-        if ($emails->isEmpty()) {
-            $this->info('No emails to process.');
-            return 0;
-        }
-
-        foreach ($emails as $email) {
-            try {
-                $parsed = $this->parser->parse($email->email);
-
-                DB::table('successful_emails')
-                    ->where('id', $email->id)
-                    ->update(['raw_text' => $parsed['raw_text']]);
-
-                $this->line("Processed email ID: {$email->id}");
-            } catch (\Throwable $e) {
-                $this->error("Failed to process email ID {$email->id}: " . $e->getMessage());
-            }
-        }
-
+        $this->jobService->processMissingEmails($this);
         $this->info('Email parsing completed.');
-
         return 0;
     }
 }
