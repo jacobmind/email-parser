@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>Email Parser</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -42,6 +42,10 @@
                             <li><code>DELETE /emails/{id}</code> – Delete email</li>
                         </ul>
                     </ul>
+
+                    <p class="mb-4">
+                        More info about the project: <a href="https://github.com/jacobmind/email-parser" class="underline">GitHub</a>
+                    </p>
 
                     <p class="mt-4">
                         Laravel Sanctum is used for authentication. All API routes are protected.
