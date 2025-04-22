@@ -56,7 +56,7 @@ class EmailParserService
             $email->subject = $this->parser->getHeader('subject') ?: "-";
             $email->from = $this->parser->getHeader('from') ?? "-";
             $email->to = $this->parser->getAddresses('to')[0]['address'] ?? "-";
-
+            $email->affiliate_id = explode('@', $this->parser->getAddresses('to')[0]['address'] ?? '')[0] ?: '1';
             $date = $this->parser->getHeader('date');
             $email->date = $date ? Carbon::parse($date) : null;
 

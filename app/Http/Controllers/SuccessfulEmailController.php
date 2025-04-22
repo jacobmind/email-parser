@@ -59,7 +59,7 @@ class SuccessfulEmailController extends Controller
             'to' => $parsed->to,
             'subject' => $parsed->subject,
             'timestamp' => $parsed->date ? $parsed->date->timestamp : time(),
-            'affiliate_id' => 1,
+            'affiliate_id' => $parsed->affiliate_id,
             'envelope' => $parsed->envelope,
             'SPF' => $parsed->spf,
             'dkim' => $parsed->dkim,

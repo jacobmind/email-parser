@@ -25,8 +25,6 @@ return new class extends Migration
             $table->string('sender_ip')->nullable();
             $table->text('to');
             $table->unsignedInteger('timestamp');
-            $table->softDeletes(); // enables soft delete
-            $table->timestamps();
 
             $table->index('affiliate_id', 'affiliate_index');
         });
