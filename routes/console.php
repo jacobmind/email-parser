@@ -8,8 +8,6 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-//Schedule::command('emails:parse')
-//    ->hourly()
-//    ->runInBackground();
-
-// todo Add to cron job -> * * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
+Schedule::command('emails:parse')
+    ->hourly()
+    ->runInBackground();
